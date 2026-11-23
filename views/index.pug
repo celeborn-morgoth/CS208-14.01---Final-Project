@@ -1,23 +1,51 @@
-extends layout
+//- Base layout extended by all pages
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    //- Dynamic page title fallback
+    title= title ? `${title} | Downtown Donuts` : 'Downtown Donuts'
+    
+    //- Google Fonts: Italianno (brand title) and Montserrat (headings & body)
+    link(rel='preconnect', href='https://googleapis.com')
+    link(rel='preconnect', href='https://gstatic.com', crossorigin)
+    link(href='https://googleapis.com/css2?family=Italianno&family=Montserrat:ital,wght@0,400;1,400&display=swap', rel='stylesheet')
+    
+    //- Making sure site uses stylesheet
+    link(rel='stylesheet', href='/stylesheets/style.css')
 
-block content
-  h1= title
-  p Welcome to #{title}
-  ol
-  each val in todos
-    li
-      span= val.task + ' - '
-      if val.completed > 0
-        span Completed
-      else
-        span Not Completed
-      form(method='POST' action='/delete')
-        input(type='hidden', name='id', value=val.id)
-        button(type='submit') Delete
+  body
+    //- Top Site Header with brand title and main navigation
+    header.site-header
+      .container.header-inner
+        a.brand-link(href='/')
+          span.brand-script Downtown Donuts
+          span.brand-sub Since 1992
+        
+        //- Accessible navigation landmark
+        nav(aria-label='Main Navigation')
+          ul.nav-list
+            li: a(href='/') Home
+            li: a(href='/menu') Menu
+            li: a(href='/about') About Us
+            li: a(href='/comments') Comments
 
-  hr
-  h2 Add a new task
-  form(method='POST' action='/create')
-    label(for='task') Task:
-    input(type='text', name='task', id='task', required)
-    button(type='submit') Create Task
+    //- Main content area filled by child templates (index, menu, about, comments)
+    main#main-content
+      block content
+
+    //- Global footer with store hours, address, and online ordering links
+    footer.site-footer
+      .container.footer-grid
+        div
+          h2.brand-script.footer-title Downtown Donuts
+          p 123 Main Street, Downtown | (555) 867-5309
+          p Mon–Fri 6AM–6PM | Sat–Sun 7AM–4PM
+        
+        div
+          h3 Order Online
+          ul.order-links
+            li: a(href='https://ubereats.com', target='_blank', rel='noopener noreferrer') UberEats
+            li: a(href='https://doordash.com', target='_blank', rel='noopener noreferrer') DoorDash
+            li: a(href='https://grubhub.com', target='_blank', rel='noopener noreferrer') GrubHub
